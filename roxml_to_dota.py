@@ -1,7 +1,7 @@
-# 文件名称   ：roxml_to_dota.py
-# 功能描述   ：把rolabelimg标注的xml文件转换成dota能识别的xml文件，
-#             再转换成dota格式的txt文件
-#            把旋转框 cx,cy,w,h,angle，或者矩形框cx,cy,w,h,转换成四点坐标x1,y1,x2,y2,x3,y3,x4,y4
+# name   ：roxml_to_dota.py
+# function: transform xml file labeled by rolabelimg to dota xml file
+#             then transform to txt file with dota format
+#            obb bounding box cx,cy,w,h,angle，or cx,cy,w,h, to four points coordinate x1,y1,x2,y2,x3,y3,x4,y4
 import os
 import xml.etree.ElementTree as ET
 import math
@@ -9,8 +9,7 @@ import math
 cls_list=['rice']
 def edit_xml(xml_file, dotaxml_file):
     """
-    修改xml文件
-    :param xml_file:xml文件的路径
+    :param xml_file
     :return:
     """
     tree = ET.parse(xml_file)
@@ -53,7 +52,7 @@ def edit_xml(xml_file, dotaxml_file):
             y3.text = str(ymin)
         else:
             obj_bnd = obj.find('robndbox')
-            obj_bnd.tag = 'bndbox'  # 修改节点名
+            obj_bnd.tag = 'bndbox'  #
             obj_cx = obj_bnd.find('cx')
             obj_cy = obj_bnd.find('cy')
             obj_w = obj_bnd.find('w')
@@ -64,7 +63,7 @@ def edit_xml(xml_file, dotaxml_file):
             w = float(obj_w.text)
             h = float(obj_h.text)
             angle = float(obj_angle.text)
-            obj_bnd.remove(obj_cx)  # 删除节点
+            obj_bnd.remove(obj_cx)  # delete node
             obj_bnd.remove(obj_cy)
             obj_bnd.remove(obj_w)
             obj_bnd.remove(obj_h)
@@ -75,9 +74,7 @@ def edit_xml(xml_file, dotaxml_file):
             x2.text, y2.text = rotatePoint(cx, cy, cx + w / 2, cy + h / 2, -angle)
             x3.text, y3.text = rotatePoint(cx, cy, cx - w / 2, cy + h / 2, -angle)
 
-
-        # obj.remove(obj_type)  # 删除节点
-        obj_bnd.append(x0)  # 新增节点
+        obj_bnd.append(x0)  # add new note
         obj_bnd.append(y0)
         obj_bnd.append(x1)
         obj_bnd.append(y1)
@@ -86,13 +83,13 @@ def edit_xml(xml_file, dotaxml_file):
         obj_bnd.append(x3)
         obj_bnd.append(y3)
 
-        tree.write(dotaxml_file, method='xml', encoding='utf-8')  # 更新xml文件
+        tree.write(dotaxml_file, method='xml', encoding='utf-8')  # update xml file
 
 
-# 转换成四点坐标
+# to four points coordinate
 def rotatePoint(xc, yc, xp, yp, theta):
-    xoff = xp - xc;
-    yoff = yp - yc;
+    xoff = xp - xc
+    yoff = yp - yc
     cosTheta = math.cos(theta)
     sinTheta = math.sin(theta)
     pResx = cosTheta * xoff + sinTheta * yoff
@@ -101,8 +98,6 @@ def rotatePoint(xc, yc, xp, yp, theta):
 
 
 def totxt(xml_path, out_path):
-    # 想要生成的txt文件保存的路径，这里可以自己修改
-
     files = os.listdir(xml_path)
     i=0
     for file in files:
@@ -151,7 +146,7 @@ def totxt(xml_path, out_path):
         print(i)
 
 if __name__ == '__main__':
-    # -----**** 第一步：把xml文件统一转换成旋转框的xml文件 ****-----
+    # -----**** xm to dota xml ****-----
     roxml_path = r"/home/kingargroo/seed/rice/label1"
     dotaxml_path = r'/home/kingargroo/seed/rice/label2'  #
     out_path = r'/home/kingargroo/seed/rice/label3'
@@ -159,6 +154,6 @@ if __name__ == '__main__':
     for file in filelist:
         edit_xml(os.path.join(roxml_path, file), os.path.join(dotaxml_path, file))
 
-    # -----**** 第二步：把旋转框xml文件转换成txt格式 ****-----
+    # -----**** xml to txt ****-----
     totxt(dotaxml_path, out_path)
 
