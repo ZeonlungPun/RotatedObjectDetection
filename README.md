@@ -6,9 +6,9 @@ This repository contain two Oriented Object Detection algorithms : YOLOV5_OOB an
 
 # Paper Links  
 
-* [YOLOV7](https://www.jstor.org/stable/2346178](https://arxiv.org/abs/2207.02696)
+* [YOLOV7](https://arxiv.org/abs/2207.02696) : YOLOv7: Trainable bag-of-freebies sets new state-of-the-art for real-time object detectors
 
-* [DOTA v2](Object Detection in Aerial Images: A Large-Scale Benchmark and Challenges)
+* [DOTA v2](https://arxiv.org/pdf/2102.12219.pdf) :Object Detection in Aerial Images: A Large-Scale Benchmark and Challenges
 
 # Packages Version Need
 ```
