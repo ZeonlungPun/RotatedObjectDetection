@@ -1,0 +1,54 @@
+# OrientedObjectDetection
+
+Train the Oriented Object Detection model for our own datasets.
+
+This repository contain two Oriented Object Detection algorithms : YOLOV5_OOB and YOLOV7_OOB, which are modified by YOLOV5 and YOLOV7.
+
+# Paper Links  
+
+* [YOLOV7](https://www.jstor.org/stable/2346178](https://arxiv.org/abs/2207.02696)
+
+* [DOTA v2](Object Detection in Aerial Images: A Large-Scale Benchmark and Challenges)
+
+# Packages Version Need
+```
+torch                    2.1.1
+torchvision              0.16.1
+triton                   2.1.0
+matplotlib               3.8.2
+mpmath                   1.3.0
+networkx                 3.2.1
+numpy                    1.26.2
+nvidia-cublas-cu12       12.1.3.1
+nvidia-cuda-cupti-cu12   12.1.105
+nvidia-cuda-nvrtc-cu12   12.1.105
+nvidia-cuda-runtime-cu12 12.1.105
+nvidia-cudnn-cu12        8.9.2.26
+nvidia-cufft-cu12        11.0.2.54
+nvidia-curand-cu12       10.3.2.106
+nvidia-cusolver-cu12     11.4.5.107
+nvidia-cusparse-cu12     12.1.0.106
+nvidia-nccl-cu12         2.18.1
+nvidia-nvjitlink-cu12    12.3.101
+nvidia-nvtx-cu12         12.1.105
+```
+
+# setup environment of YOLOV7_OOB
+__You need to have installed CUDA under Linux system__
+```
+cd utils/nms_rotated/
+python setup.py build_ext --inplace
+```
+
+# label package
+* [roLabelimg](https://github.com/cgvict/roLabelImg)
+
+the format of roLabelimg is (cx,cy,w,h,theta)
+
+Using roxml_to_dota.py:
+
+for YOLOV7_OOB, you need to transform the format to dota format (x0,y0,x1,y1,x2,y2,x3,y3) (not normalized) 
+
+for YOLOV5_OOB, you need to transform the format to yolov5 format (x0,y0,x1,y1,x2,y2,x3,y3) (normalized)
+
+
