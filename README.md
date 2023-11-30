@@ -67,8 +67,8 @@ The results of mosaic can be visualized as :<br>
 
 # finnal result demo
 The results of Oriented Object Detection :<br>
-![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/r1.jpg)
+![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/r1.png)
 
-![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/r2.jpg)
+![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/r2.png)
 
 
