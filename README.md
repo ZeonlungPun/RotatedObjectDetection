@@ -51,4 +51,24 @@ for YOLOV7_OOB, you need to transform the format to dota format (x0,y0,x1,y1,x2,
 
 for YOLOV5_OOB, you need to transform the format to yolov5 format (x0,y0,x1,y1,x2,y2,x3,y3) (normalized)
 
+# data augmentation
+we provide mixup and mosaic data augmentation method for Oriented Object Detection in rotate_aug.py.
+
+example:
+```
+GetAugImgAndLabel(annotation_lines,aug_num=20,aug_path='/home/kingargroo/seed/rice_aug',dest_file='/home/kingargroo/seed/rice_aug_label')
+```
+
+The results of mixup can be visualized as :<br>
+![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/20.jpg)
+
+The results of mosaic can be visualized as :<br>
+![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/7.jpg)
+
+# finnal result demo
+The results of Oriented Object Detection :<br>
+![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/r1.jpg)
+
+![image](https://github.com/ZeonlungPun/OrientedObjectDetection/blob/main/demo/r2.jpg)
+
 
