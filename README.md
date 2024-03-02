@@ -1,6 +1,6 @@
-# OrientedObjectDetection
+# RotatedObjectDetection
 
-Train the Oriented Object Detection model for our own datasets.
+Train the Rotated Object Detection model for our own datasets.
 
 This repository contain two Oriented Object Detection algorithms : YOLOV5_OOB and YOLOV7_OOB, which are modified by YOLOV5 and YOLOV7.
 
