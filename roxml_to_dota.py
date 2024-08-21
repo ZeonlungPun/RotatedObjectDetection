@@ -2,11 +2,11 @@
 # function: transform xml file labeled by rolabelimg to dota xml file
 #             then transform to txt file with dota format
 #            obb bounding box cx,cy,w,h,angle，or cx,cy,w,h, to four points coordinate x1,y1,x2,y2,x3,y3,x4,y4
-import os
+import os,cv2,math
 import xml.etree.ElementTree as ET
-import math
 
-cls_list=['rice']
+
+cls_list=['barley']
 def edit_xml(xml_file, dotaxml_file):
     """
     :param xml_file
@@ -15,7 +15,7 @@ def edit_xml(xml_file, dotaxml_file):
     tree = ET.parse(xml_file)
     objs = tree.findall('object')
     for ix, obj in enumerate(objs):
-        x0 = ET.Element("x0")  # 创建节点
+        x0 = ET.Element("x0")  # create node
         y0 = ET.Element("y0")
         x1 = ET.Element("x1")
         y1 = ET.Element("y1")
@@ -23,9 +23,7 @@ def edit_xml(xml_file, dotaxml_file):
         y2 = ET.Element("y2")
         x3 = ET.Element("x3")
         y3 = ET.Element("y3")
-        # obj_type = obj.find('bndbox')
-        # type = obj_type.text
-        # print(xml_file)
+
 
         if (obj.find('robndbox') == None):
             obj_bnd = obj.find('bndbox')
@@ -97,7 +95,7 @@ def rotatePoint(xc, yc, xp, yp, theta):
     return str(int(xc + pResx)), str(int(yc + pResy))
 
 
-def totxt(xml_path, out_path):
+def totxtYOLOV5(xml_path, out_path):
     files = os.listdir(xml_path)
     i=0
     for file in files:
@@ -145,15 +143,95 @@ def totxt(xml_path, out_path):
         # print(output)
         print(i)
 
+def dota2yolo(dotaxml_path,out_path,img_dir):
+    files = os.listdir(dotaxml_path)
+    i = 0
+    for file in files:
+        main_name=file.split(".")[0]+'.jpg'
+        img_path=os.path.join(img_dir,main_name)
+        img=cv2.imread(img_path)
+        h,w=img.shape[0:2]
+        tree = ET.parse(dotaxml_path + os.sep + file)
+        root = tree.getroot()
+
+        name = file.split('.')[0]
+
+        output = out_path + '/' + name + '.txt'
+        file = open(output, 'w')
+        i = i + 1
+        objs = tree.findall('object')
+        for obj in objs:
+            cls = obj.find('name').text
+            box = obj.find('bndbox')
+            x0 = int(float(box.find('x0').text))
+            y0 = int(float(box.find('y0').text))
+            x1 = int(float(box.find('x1').text))
+            y1 = int(float(box.find('y1').text))
+            x2 = int(float(box.find('x2').text))
+            y2 = int(float(box.find('y2').text))
+            x3 = int(float(box.find('x3').text))
+            y3 = int(float(box.find('y3').text))
+            if x0 < 0:
+                x0 = 0
+            if x1 < 0:
+                x1 = 0
+            if x2 < 0:
+                x2 = 0
+            if x3 < 0:
+                x3 = 0
+            if y0 < 0:
+                y0 = 0
+            if y1 < 0:
+                y1 = 0
+            if y2 < 0:
+                y2 = 0
+            if y3 < 0:
+                y3 = 0
+            for cls_index, cls_name in enumerate(cls_list):
+                if cls == cls_name:
+                    file.write("{} {} {} {} {} {} {} {} {} \n".format(cls_index,x0/w, y0/h, x1/w, y1/h, x2/w, y2/h, x3/w, y3/h))
+        file.close()
+        # print(output)
+        print(i)
+
+def totxt(xml_path, out_path):
+    files = os.listdir(xml_path)
+    for file in files:
+
+        tree = ET.parse(xml_path + os.sep + file)
+        root = tree.getroot()
+
+        name = file.strip('.xml')
+        output = out_path + name + '.txt'
+        file = open(output, 'w')
+
+        objs = tree.findall('object')
+        for obj in objs:
+            cls = obj.find('name').text
+            box = obj.find('bndbox')
+            x0 = int(float(box.find('x0').text))
+            y0 = int(float(box.find('y0').text))
+            x1 = int(float(box.find('x1').text))
+            y1 = int(float(box.find('y1').text))
+            x2 = int(float(box.find('x2').text))
+            y2 = int(float(box.find('y2').text))
+            x3 = int(float(box.find('x3').text))
+            y3 = int(float(box.find('y3').text))
+            file.write("{} {} {} {} {} {} {} {} {} 0\n".format(x0, y0, x1, y1, x2, y2, x3, y3, cls_list[0]))
+        file.close()
+        print(output)
+
+
 if __name__ == '__main__':
     # -----**** xm to dota xml ****-----
-    roxml_path = r"/home/kingargroo/seed/rice/label1"
-    dotaxml_path = r'/home/kingargroo/seed/rice/label2'  #
-    out_path = r'/home/kingargroo/seed/rice/label3'
-    filelist = os.listdir(roxml_path)
-    for file in filelist:
-        edit_xml(os.path.join(roxml_path, file), os.path.join(dotaxml_path, file))
+    roxml_path = r"/home/kingargroo/seed/datasets_predict/barley"
+    dotaxml_path = r'/home/kingargroo/seed/datasets_predict/barley1'  #
+    out_path = r'/home/kingargroo/seed/datasets_predict/barley2/'
+    img_dir=r'/home/kingargroo/seed/datasets/barley'
+    # filelist = os.listdir(roxml_path)
+    # for file in filelist:
+    #    edit_xml(os.path.join(roxml_path, file), os.path.join(dotaxml_path, file))
 
     # -----**** xml to txt ****-----
-    totxt(dotaxml_path, out_path)
-
+    #totxt(dotaxml_path, out_path)
+    dota2yolo(dotaxml_path,out_path,img_dir)
